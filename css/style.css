@@ -1,0 +1,223 @@
+/*
+CSS jeu de combat Aurore Mick et Will
+*/
+
+* {
+    margin: 0;
+    padding: 0;  
+}
+
+body {
+    font-family: 'Courrier New', sans-serif;
+    color: #333;
+    font-size: 16px;    
+}
+
+.flex {  
+    display: flex;  
+    flex-wrap: wrap;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-start {
+    justify-content: flex-start;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.justify-center {
+    justify-content: center;
+}
+.justify-evenly{
+    justify-content: space-evenly;
+}
+.justify-around{
+    justify-content: space-around;
+}
+.align-center {
+    align-items: center;
+}
+
+.align-baseline {
+    align-items: baseline;
+}
+
+li {
+    list-style-type: none;
+}
+
+a, button {
+    border: 1px solid black;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+img {
+    width: 100%;   
+}
+
+main{
+    background-color: #000;
+    height: 100vh;
+}
+.bg-primary{
+    background-color: #fff;
+}
+label{
+    display: table-caption;
+}
+h1,h2,label{
+    color: #fff;    
+}
+.accueil h1, .form h1{
+    text-align: center;
+    padding-top: 100px;
+    margin-bottom: 150px;
+}
+.accueil h2, .accueil p{
+    text-align: center;
+}
+
+.accueil input{
+    padding: 8px 0;
+    margin: 16px 0;
+}
+.btn{    
+        
+    display: inline-block;    
+    padding: 16px 32px;  
+    text-transform: uppercase;
+}
+.accueil .btn, .form .btn{
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    margin-top: 32px;
+    padding: 16px 32px; 
+}
+.pointStatsStart{
+    border: 1px solid #fff;
+    color: #fff;
+    display: inline-block;
+    padding: 8px;
+}
+.form p{
+    color: #fff;
+}
+
+.plateauJeu h1{
+    text-align: center;
+    padding: 32px 0;
+}
+.plateauJeu .btn, .plateauJeu h2{
+    color: #000;
+    background-color: transparent;
+    text-align: center;
+}
+
+player{
+    height: 400px;
+    width: 100%;
+}
+.player .btn{
+    width: 80%;
+}
+.player span{
+    border: 1px solid black;
+    width: 32px;
+    height: 20px;
+    margin-left: -85px;
+    margin-right: 60px;
+    margin-top: 10px;
+} 
+.player p{
+    margin: 12px auto;
+    text-align: center;
+}
+.console h2, .console p{
+    text-align: left;
+}
+.first-zone{
+    max-height: 600px;
+    margin: 0 auto;
+}
+.adversaire{
+    height: 150px;
+    width: 100%;
+}
+.zoneplayer{
+    height: 550px;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+.zoneRoom{
+    height: 550px;    
+}
+.border{
+    border: 1px solid #000;    
+}
+.zoneRoom .border{
+    height: 440px;
+    margin-top: 16px;
+}
+.bouttonRoom{
+    align-content: flex-end;
+    margin-bottom: 16px;
+}
+.console{
+    height: 170px;
+    overflow: auto;
+}
+
+
+/*--------------------------------------------------------------------*/
+/*------------------- Taille ---------------------------------------*/
+.hidden {
+  display: none;
+}
+.lg-100{
+    width: 100%;
+}
+.lg-95{
+    width: 95%;
+}
+.lg-78 {
+    width: 78%;
+}
+.lg-75{
+    width: 75%;
+}
+.lg-70 {
+  width: 70%;
+}
+.lg-58{
+    width: 58%
+}
+.lg-48{
+    width: 48%;
+}
+.lg-28{
+    width: 28%;
+}
+.lg-20 {
+  width: 20%;
+}
+
+.lg-18{
+    width: 18%;
+}
+.lg-10{
+    width: 10%;
+}
