@@ -17,7 +17,7 @@ class Player
      * @param $champ
      * @return mixed|string
      */
-    function get($champ){
+    public function get($champ){
         if(isset($this->valeurs[$champ])){
             return $this->valeurs[$champ];
         }else{
@@ -28,7 +28,7 @@ class Player
     /**
      * @return int
      */
-    function getId(){
+    public function getId(){
         return $this->id;
     }
 
@@ -229,7 +229,7 @@ class Player
 
         // preparer et executer la requete
         $req = $this->executeSql($sql, $param);
-        // on verifi si on a une ligne
+        // on verifie si on a une ligne
         $ligne = $req->fetch(PDO::FETCH_ASSOC);
         if($ligne === false) { return false;}
         // on a bien une ligne
