@@ -15,7 +15,7 @@
 // si success alors on modifie le template plateauJeu
 //error si un pbl est survenu durant le procedé
 
-
+//-------------------      augmenter STAT ----------------------
 
 function augmenterStrength(id) {
     //role : declanche la modification des caracteristique et l'affichage sur le template 
@@ -55,6 +55,8 @@ function changeStat(data) {
         stat.html(data);
     
 }
+
+//----------------------       bouton reculer   -----------------------------
 
 function previousRoom(id){
     //role :declanche la modifi de l'affichage du fragments tableauJeu
