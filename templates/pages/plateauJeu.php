@@ -58,13 +58,16 @@
                 <div class=" bg-primary lg-100 adversaire">
                     <h2>liste des adversaires</h2>
                     <!--  $otherPlayer //foreach chaque adversaire present ds la salle afficher les pseudo  -->
-                    <?php
+                    <div>
+                        <?php
                         foreach ($listePlayer as $adverssaire){
-                            echo "<p> $adverssaire->get('pseudo') </p>";
+                            echo "<p><a href='".$adverssaire->getId()."'> ".$adverssaire->get('pseudo')." </a></p>";
                         }
 
 
-                    ?>
+                        ?>
+                    </div>
+
 
                 </div>
             </div>
