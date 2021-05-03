@@ -19,5 +19,4 @@ if (isset($_REQUEST)) {
     }
     $_SESSION['id'] = $player->getId();
     include 'templates/pages/plateauJeu.php';
-
 }

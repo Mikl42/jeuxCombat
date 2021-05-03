@@ -210,8 +210,10 @@ class Player
         if(!$req) {
             return false;
         }
+        $ligne = $req->fetch(PDO::FETCH_ASSOC);
+        var_dump($ligne);
         // Si $req contient une ou plusieur ligne alors aucun pseudo existe
-        if($req->rowCount() != 1){
+        if($ligne['pseudo'] != $this->get('pseudo')){
             return false;
         }
         // Sinon un pseudo existe on retourn true
