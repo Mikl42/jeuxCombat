@@ -242,4 +242,27 @@ class Player
         return new Player($ligne['id']);
 
     }
+
+    public function listePlayerSameRoom(){
+        // Role : Récupère la liste de tout les joueurs qui sont dans la meme room que le joueur appelant
+        // Paramètre : Néant
+        // Retour : Liste
+
+        // Construction de la requete de récupération des players
+        $sql = "SELECT `pseudo` FROM `player` WHERE `room` = :room";
+        $param = [":room" => $this->get("room")];
+
+        // Prepare et execute la requete
+        $req = $this->executeSql($sql, $param);
+
+        if(!$req){return false};
+        // On part d'un tableau vide qui récupèrera les joueurs
+        $listePlayer = [];
+        // Tant qu'il y a des joueurs on les ajoute au tableau
+        while($ligne = $req->fetch(PDO::FETCH_ASSOC)){
+            $player = new Player($ligne['id']);
+            $listePlayer[] = $player->get('pseudo');
+        }
+        return $listePlayer;
+    }
 }

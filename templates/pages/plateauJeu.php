@@ -3,7 +3,9 @@
 /*
  * template plateauJeu:  amont afficher_plateauJeu.php
  * 
- * parametre recu : objet player (toutes les caracteristiques du player)
+ * parametre recu :
+ *          - objet player (toutes les caracteristiques du player)
+ *          - listePlayer : Une liste de tous les joueurs qui sont dans la meme piece
  * 
  */
 
@@ -22,7 +24,6 @@
     <main>
         <h1>jeu de combat</h1>
         <!-- zone player et adversaire -->
-        <?= $_SESSION['id'] ?>
         <div class="flex justify-around lg-95 first-zone" >
             
             <!-- zone player --> 
@@ -57,6 +58,13 @@
                 <div class=" bg-primary lg-100 adversaire">
                     <h2>liste des adversaires</h2>
                     <!--  $otherPlayer //foreach chaque adversaire present ds la salle afficher les pseudo  -->
+                    <?php
+                        foreach ($listePlayer as $adverssaire){
+                            echo "<p> $adverssaire->get('pseudo') </p>";
+                        }
+
+
+                    ?>
 
                 </div>
             </div>

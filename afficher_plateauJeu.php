@@ -17,6 +17,9 @@ if (isset($_REQUEST)) {
     if (!$player){
         header("location: index.php");
     }
+    // On enregistre l id du player dans une session id
     $_SESSION['id'] = $player->getId();
+    // On récupère la liste de tous les joueurs qui sont dans la meme pièce
+    $listePlayer = $player->listePlayerSameRoom();
     include 'templates/pages/plateauJeu.php';
 }
