@@ -12,7 +12,10 @@ $idAdversaire = $_GET['id'];
 
 $player = new Player($_SESSION['id']);
 
-$player->resultatCombat($player->attack($idAdversaire));
+
+
+
+$resultat = $player->attack($idAdversaire);
 
 if($resultat === "EQUAL"){
     echo "egaliter";
