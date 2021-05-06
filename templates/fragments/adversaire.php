@@ -1,16 +1,16 @@
 <?php
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * fragment listes des advesaires : adversaire.php
+ * parametre : tableau d'objet listePlayer
+ * 
  */
 ?>
 
 
     <div>
         <?php
-        foreach ($listePlayer as $adverssaire) {
-            echo "<p><a href='" . $adverssaire->getId() . "'> " . $adverssaire->get('pseudo') . " </a></p>";
+        foreach ($listePlayer as $adversaire) {
+            echo "<p><a href='" . $adversaire->getId() . "'> " . $adversaire->get('pseudo') . " </a></p>";
         }
         ?>
     </div>

@@ -1,9 +1,9 @@
 <?php
 
-/**
- * Controller afficher_form_crea_perso.php
- * Role :  affiche le formulaire de création du personnage (templates/pages/form_creer_perso.php)
- * Paramètre : néant
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
 // Inclusion du init
@@ -11,15 +11,25 @@ include 'library/init.php';
 
 
 $player = new Player();
+
 if (isset($_REQUEST)) {
     $player->loadFromPost($_REQUEST);
-    $player =  $player->playerExist();
-    if (!$player){
+    $player = $player->playerExist();
+    if (!$player) {
         header("location: index.php");
     }
-    // On enregistre l id du player dans une session id
     $_SESSION['id'] = $player->getId();
-    // On récupère la liste de tous les joueurs qui sont dans la meme pièce
+    // $_GET['id'] = $_SESSION['id'];
     $listePlayer = $player->listePlayerSameRoom();
+
+
+//recupere agility et room
+    $agility = $player->get("agility");
+    $room = $player->get("room");
+    $resistance = $player->get("resistance");
+    $strength = $player->get("strength");
+    $hp = $player->get("hp");
+    
     include 'templates/pages/plateauJeu.php';
 }
+

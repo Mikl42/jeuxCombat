@@ -23,7 +23,26 @@
         <p>resistance</p>
         <span class="resistance"><?= $player->get("resistance") ?></span>
     </div>
-    <p><button onclick="augmenterStrength(<?= $player->getId() ?>)" class="btn">augmenter Force</button></p>
-    <p><button onclick="augmenterRes(<?= $player->getId() ?>)"  class="btn">augmenter resistance</button></p>
+    <div class="flex justify-around" >
+        <?php if (isset($message) AND (!empty($message))) {
+            echo $message;
+        }
+        ?> 
+    </div>
+    <?php if ($agility >= 3 and $strength >= 1) { ?>
+        <p><button onclick="augmenterStrength()" class="btn">augmenter Force</button></p>
+    <?php } else {
+        ?>
+        <p><button onclick="augmenterStrength()" class="btn disable" disabled="disabled">augmenter Force</button></p>
+    <?php
+    }
+    if ($agility >= 3 and $resistance >= 1) {
+        ?>
+        <p><button onclick="augmenterRes()"  class="btn">augmenter resistance</button></p>
+<?php } else { ?>
+        <p><button onclick="augmenterRes()"  class="btn disable" disabled="disabled">augmenter resistance</button></p>
+<?php } ?>
 
 </div>
+
+

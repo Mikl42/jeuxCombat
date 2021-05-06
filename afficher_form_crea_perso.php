@@ -1,13 +1,12 @@
 <?php
 
-/**
- * Controller afficher_form_crea_perso.php
- * Role :  affiche le formulaire de création du personnage (templates/pages/form_creer_perso.php)
- * Paramètre : néant
+/* 
+ * controler prepare et affiche formulaire création nouveau perso
+ * parametre neant
  */
 
-// Inclusion du init
 include 'library/init.php';
 
 
-include 'templates/pages/form_creer_perso.php';
+
+include "templates/pages/form_creer_perso.php";

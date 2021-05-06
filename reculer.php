@@ -7,16 +7,11 @@
 
 include "library/init.php";
 
-//recuperation des parametres: 
-$id = isset($_REQUEST["id"]) ? $_REQUEST["id"] : "";
 
 
-$player = new Player($id);
+$player = new Player($_SESSION['id']);
 
 
-if ($player->get("room")>=1){
-    $player->set(get('room'), $player->get('room')-1);
-
-    $player->update();
-    include "templates/pages/plateauJeu.php";
-}
+$player->reculer();
+//retour au template avec MAJ de la zone room
+include "templates/fragments/roomPrincipal.php";  
