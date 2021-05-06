@@ -21,4 +21,5 @@ include_once "model/_model.php";
 
 // Inclure les classes de model de données
 include_once "model/Player.php";
+include_once "model/Historic.php";
 

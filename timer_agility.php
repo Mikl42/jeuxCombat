@@ -1,8 +1,20 @@
 <?php
 
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * controler timer_agility.php
+ * 
+ * role : augmente les points d'agility de 1 toutes les 0.5s
+ * param : neant
+ * return : neant
+ * 
  */
 
+include "library/init.php";
+
+$player = new Player();
+
+
+/*
+ * recuperer l'agilité
+ * recuperer les dernieres
+ */

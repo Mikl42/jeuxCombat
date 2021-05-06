@@ -19,6 +19,9 @@ include "library/init.php";
 $player = new Player($_SESSION['id']);
 
  $message = $player->augmenterForce();
+ $agility = $player->get("agility");
+ $resistance = $player->get("resistance");
+    $strength = $player->get("strength");
 //appel la methode qui mettra a jour les stat
  
 //retour au template plateauJeu en passant par ajax pour la MAJ des stat

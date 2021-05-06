@@ -27,6 +27,14 @@ $(function () {
                 alert("Une erreur s'est produite.... again");
             }
         });
+        /*$.ajax("timer_agility.php", {
+           methode : "GET",
+           success : actuPlateau,
+           error: function(){
+               alert("Une erreur s'est produite, timer agi");
+           }
+           
+        });*/
     }
 
     function actuPlateau(data) {

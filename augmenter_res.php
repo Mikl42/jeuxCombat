@@ -16,6 +16,9 @@ $player = new Player($_SESSION['id']);
 
 
 $message = $player->augmenterResistance();
+$agility = $player->get("agility");
+ $resistance = $player->get("resistance");
+    $strength = $player->get("strength");
 
 //retour au template plateauJeu en passant par ajax pour la MAJ des stat
 include "templates/fragments/player.php";

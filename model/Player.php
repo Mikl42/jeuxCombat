@@ -1,26 +1,26 @@
 <?php
 
-class Player {
 
+class Player
+{
     protected $table = "player";
     protected $listeChamps = ["hp", "strength", "agility", "resistance", "pseudo", "pwd", "room"];
+
     protected $valeurs = [];
     protected $id = 0;
-    protected $listeLiens = [];
 
-    function __construct($id = null) {
-        if (!is_null($id))
-            $this->loadById($id);
+    function __construct($id = null){
+    if (! is_null($id)) $this->loadById($id);
     }
 
     /**
      * @param $champ
      * @return mixed|string
      */
-    function get($champ) {
-        if (isset($this->valeurs[$champ])) {
+    public function get($champ){
+        if(isset($this->valeurs[$champ])){
             return $this->valeurs[$champ];
-        } else {
+        }else{
             return "";
         }
     }
@@ -28,7 +28,7 @@ class Player {
     /**
      * @return int
      */
-    function getId() {
+    public function getId(){
         return $this->id;
     }
 
@@ -37,8 +37,8 @@ class Player {
      * @param $valeur
      * @return bool
      */
-    public function set($champ, $valeur) {
-        if (!in_array($champ, $this->listeChamps)) {
+    public function set($champ, $valeur){
+        if(!in_array($champ, $this->listeChamps)){
             return false;
         }
         $this->valeurs[$champ] = $valeur;
@@ -48,10 +48,11 @@ class Player {
     /**
      * @return bool
      */
-    public function create() {
+    public function create(){
         // Role : insert dans la base de donnée
         // Paramètre : néant
         // Retour : true si tout est ok , false sinon
+
         // Construction de la requête
         $sql = "INSERT INTO `$this->table` SET ";
         // on pars de tableau vide pour les paramètres et la liste des champs de la requete
@@ -83,54 +84,53 @@ class Player {
     /**
      * @return bool
      */
-    public function update() {
+    public function update(){
         // Role : modifie l objet
         // Paramètre : Neant
         // Retour : True si tout est ok , false sinon
+
         // Construction de la requete SQL
         $sql = "UPDATE `$this->table` SET ";
         $param = [];
         $liste = [];
-        foreach ($this->listeChamps as $champ) {
+        foreach ($this->listeChamps as $champ){
             $liste[] = "`$champ` = :$champ";
             $param[":$champ"] = $this->get($champ);
         }
         $sql .= implode(", ", $liste);
         $sql .= " WHERE `id` = :id";
         $param[':id'] = $this->id;
-        if (!$this->executeSql($sql, $param))
-            return false;
+        if(!$this->executeSql($sql, $param)) return false;
         return true;
     }
 
     /**
      * @return bool
      */
-    public function delete() {
+    public function delete(){
         // Role : Supprime l objet de la base de donnée
         // Parametre : Néant
         // Retour : true si tout es ok, false sinon
+
         // Construction de la requete SQL
         $sql = "DELETE FROM `$this->table` WHERE `id` = :id";
         $param = [":id" => $this->id];
-        if (!$this->executeSql($sql, $param))
-            return false;
+        if (!$this->executeSql($sql, $param)) return false;
         return true;
     }
-
     /**
      * @param $sql
      * @param array $param
      * @return false|PDOStatement
      */
-    private function executeSql($sql, $param = []) {
+    private function executeSql($sql, $param = []){
         // Preparer et executer la requete
         // Recupere le connecteur a la base de donnée
         global $bdd;
         // Prepare la requete
         $req = $bdd->prepare($sql);
         // Test si la requete a rencontré une erreur on retourne false
-        if (!$req->execute($param)) {
+        if(!$req->execute($param)){
             echo "Erreur SQL = $sql <br>";
             return false;
         }
@@ -138,14 +138,18 @@ class Player {
         return $req;
     }
 
+
+
     /**
      * @param $id
      * @return bool
      */
-    public function loadById($id) {
+    public function loadById($id)
+    {
         // Role : charge l'objet par son id
         // Paramètre : $id : Id de l'objet voulu
         // Retour : true si chargé , false sinon
+
         // Construction de la requete
         $sql = "SELECT * FROM `$this->table` WHERE `id` = :id";
         $param = [":id" => $id];
@@ -159,7 +163,7 @@ class Player {
         }
         // requete executer
         $ligne = $req->fetch(PDO::FETCH_ASSOC);
-        if ($ligne === false) {
+        if($ligne === false){
             $this->id = 0;
             return false;
         }
@@ -171,53 +175,58 @@ class Player {
     /**
      * @param $tab
      */
-    public function loadFromPost($tab) {
+    public function loadFromPost($tab){
         foreach ($tab as $index => $value) {
             $this->set($index, $value);
         }
     }
-
+    
     /**
      * @param $tab
      * @param null $id
      */
-    private function loadFromTab($tab, $id = null) {
+    protected function loadFromTab($tab, $id = null) {
         // Rôle : charge les attributs d'un objet à partir des valeurs de $tab
         // Retour : néant
         // Paramètres :
         //  $tab : tableau indexé des champs  (les index sont des noms de champs, les valeurs la valeur à donner
         //  $id (optionnel) : si il est précisé, on remplit aussi l'id
 
-        foreach ($tab as $nom => $valeur)
-            $this->set($nom, $valeur);       // Set gérera les erreurs
-        if (!is_null($id))
-            $this->id = $id;
+        foreach($tab as $nom=>$valeur) $this->set($nom, $valeur);       // Set gérera les erreurs
+        if ( ! is_null($id)) $this->id = $id;
     }
 
-    public function pseudoExist() {
+    /**
+     * @return bool
+     */
+    public function pseudoExist(){
         // Role : verifie si le pseudo existe déjà dans la base de donnée
         // Paramètre : Néant
         // Retour : true si le pseudo existe false sinon
+
         // Construction de la requete SQL
         $sql = "SELECT `pseudo` FROM `$this->table` WHERE `pseudo` = :pseudo";
         $param = [":pseudo" => $this->get("pseudo")];
 
         // Prepare et executer la requete
         $req = $this->executeSql($sql, $param);
-        if (!$req) {
+        if(!$req) {
             return false;
         }
         $ligne = $req->fetch(PDO::FETCH_ASSOC);
         var_dump($ligne);
         // Si $req contient une ou plusieur ligne alors aucun pseudo existe
-        if ($ligne['pseudo'] != $this->get('pseudo')) {
+        if($ligne['pseudo'] != $this->get('pseudo')){
             return false;
         }
         // Sinon un pseudo existe on retourn true
         return true;
     }
 
-    public function playerExist() {
+    /**
+     * @return false|Player
+     */
+    public function playerExist(){
         // Role : vérifie si le player existe en bdd
         // Paramètre : Néant
         // Retour :
@@ -230,115 +239,44 @@ class Player {
         $req = $this->executeSql($sql, $param);
         // on verifie si on a une ligne
         $ligne = $req->fetch(PDO::FETCH_ASSOC);
-        if ($ligne === false) {
-            return false;
-        }
+        if($ligne === false) { return false;}
         // on a bien une ligne
         // on verifie que les mot de passe corresponde
-        if (!password_verify($this->get("pwd"), $ligne['pwd'])) {
+        if (!password_verify($this->get("pwd"), $ligne['pwd'])){
             return false;
         }
         return new Player($ligne['id']);
+
     }
 
-    public function listePlayerSameRoom() {
+    /**
+     * @return array|false
+     */
+    public function listePlayerSameRoom(){
         // Role : Récupère la liste de tout les joueurs qui sont dans la meme room que le joueur appelants
         // Paramètre : Néant
         // Retour : Liste
+
         // Construction de la requete de récupération des players
         $sql = "SELECT * FROM `player` WHERE `room` = :room AND `pseudo` != :pseudo";
         $param = [
             ":room" => $this->get("room"),
             ":pseudo" => $this->get('pseudo')
-        ];
+            ];
 
         // Prepare et execute la requete
         $req = $this->executeSql($sql, $param);
 
-        if (!$req) {
-            return false;
-        }
+        if(!$req){return false;};
         // On part d'un tableau vide qui récupèrera les joueurs
         $listePlayer = [];
         // Tant qu'il y a des joueurs on les ajoute au tableau
-        while ($ligne = $req->fetch(PDO::FETCH_ASSOC)) {
+        while($ligne = $req->fetch(PDO::FETCH_ASSOC)){
             $adverssaire = new Player();
             $adverssaire->loadFromTab($ligne, $ligne['id']);
             $listePlayer[] = $adverssaire;
         }
         return $listePlayer;
-    }
-
-    function augmenterForce() {
-        //role augmenter la force
-        //parametre neant
-        //return un tableau des erreurs rencontré si celui ci n'est pas vid
-        //si agility est strictement superieur a 3 et la force <= a 14 alors et resistance strictement sup a 1.
-        // Tableau vide pour recupérer les erreurs
-
-        if (($this->get('agility') > 3) && ($this->get('strength') <= 14) && ($this->get('resistance') > 1)) {
-            //agility perd 3 point, force gagne 1 pt et resistance perd 1pt
-            $this->set("agility", $this->get('agility') - 3);
-            $this->set("strength", $this->get('strength') + 1);
-            $this->set("resistance", $this->get('resistance') - 1);
-
-//appel la methode qui mettra a jour les stat
-            $this->update();
-            return;
-        }
-        //sinon si point d'agi insuffisant
-        if ($this->get('agility') <= 3) {
-            $message = "agilité insuffisante";
-            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
-            return $message;
-        }
-        //sinon si force deja trop elevée
-        if ($this->get('strength') >= 15) {
-            $message = "point de force au maximum";
-            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
-            return $message;
-        }
-//sinon si resistance insuffisante
-        if ($this->get('resistance') <= 1) {
-            $message = "point de resistance insuffisant";
-            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
-            return $message;
-        }
-    }
-
-    function augmenterResistance() {
-        //role : augmente la resistance
-        //parametre neant
-        //retour :
-        //si agility est strictement superieur a 3 et la force <= a 14 alors et resistance strictement sup a 1.
-        if (($this->get('agility') > 3) && ($this->get('resistance') <= 14) && ($this->get('strength') > 1)) {
-            //agility perd 3 point, force gagne 1 pt et resistance perd 1pt
-            $this->set("agility", $this->get('agility') - 3);
-            $this->set("strength", $this->get('strength') - 1);
-            $this->set("resistance", $this->get('resistance') + 1);
-
-            //appel la methode qui mettra a jour les stat
-            $this->update();
-            return;
-        }
-        //sinon si point d'agi insuffisant
-        if ($this->get('agility') <= 3) {
-            $message = "agilité insuffisante";
-            return $message;
-            //retour au template plateauJeu en passant par ajax pour la MAJ des stat            
-        }
-//sinon si force deja trop elevée
-        if ($this->get('strength') <= 1) {
-            $message = "point de force au maximum";
-            return $message;
-            //retour au template plateauJeu en passant par ajax pour la MAJ des stat            
-        }
-//sinon si resistance insuffisante
-        if ($this->get('resistance') >= 15) {
-            $message = "point de resistance insuffisant";
-            return $message;
-            //retour au template plateauJeu en passant par ajax pour la MAJ des stat            
-        }
     }
 
     function avancer() {
@@ -347,7 +285,7 @@ class Player {
         //retuour
         //recupere l'agilité
         $agility = $this->get("agility");
-        //recupere la salle + 1 
+        //recupere la salle + 1
         $nextRoom = $this->get("room") + 1;
 
         //si agility est superieur ou egal a nextroom
@@ -372,5 +310,130 @@ class Player {
             $this->update();
             return;
         }
+    }
+
+    public function loadHistoric(){
+        // Role : Récupère tout l' historiques du joueur
+        // Paramètre : Néant
+        // Retour : tableau d'objet Historic
+        $sql = "SELECT * FROM `historic` WHERE `idplayer` = :idPlayer";
+        $param = [":idPlayer" => 29];
+        $req = $this->executeSql($sql, $param);
+
+        if ($req === false)return false;
+
+        $listHistoric = [];
+
+        while($ligne = $req->fetch(PDO::FETCH_ASSOC)){
+            $historic = new Historic();
+            $historic->loadFromTab($ligne);
+            $listHistoric[] = $historic;
+        }
+        return $listHistoric;
+    }
+
+    public function attack($idAdversaire){
+        // Role : déreoulement d'une attaque
+        // Paramètre :
+        //      - $force = force donnée
+        //      - $idAversaire = id du joueur attaqué
+        // Retour :
+        //      - "EQUAL" = pour une égalité
+        //      - "WIN" = pour combat gagné
+        //      - "LOOSE" = pour combat perdu
+
+        // On recupère notre adversaire et on le charge
+        $adversaire = new Player($idAdversaire);
+        // donc adversaire subit une attaque
+        // Si on perd le combat : on perd 1 point de vie.
+        if($adversaire->subirAttack($this->get("strength"), $this->getId()) === "WIN"){
+            $this->set("hp", $this->get("hp") - 1);
+            $this->update();
+            return "LOOSE";
+        }
+        // Si l’adversaire esquive et que l’on a 10 points de force ou plus, un point de force devient un point de résistance.
+        if($adversaire->subirAttack($force, $this->getId()) === "ESQUIVE") {
+            if($this->get("strength") >= 10){
+                $this->set("strength", $this->get("strength") - 1);
+                $this->set("resistance", $this->get("resistance") + 1);
+                $this->update();
+                return "EQUAL";
+            }else{
+                return "EQUAL";
+            }
+        }
+        // Si on gagne le combat, on récupère un point d'agilité (ça motive ! ), ou un point de vie si on a déjà 15 points d'agilité.
+        // on recupère ses point de vie avant le combat
+        $stockHpAdversaire = $adversaire->get("hp");
+        if($adversaire->subirAttack($force, $this->getId()) === "LOOSE") {
+            if($this->get("agility") < 15){
+                $this->set("agility", $this->get("agility") + 1);
+                $this->update();
+                return "WIN";
+            }else{
+                $this->set("hp", $this->get("hp") + 1);
+                $this->update();
+                return "WIN";
+            }
+            if ($adversaire->get("hp") === 0){
+                $this->set("hp", $this->get("hp") + $stockHpAdversaire);
+                $this->update();
+                return "WIN";
+            }
+        }
+    }
+
+    public function subirAttack($force, $idAttaquant){
+        // Role : Subir une attaque
+        // Paramètre:
+        //      - $force = force de l'attaque donnée
+        //      - $idAttaquant = l'id du joueur qui attaque
+        // Retour:
+        //      - "E" = pour une esquive
+        //      - "WIN" = pour combat gagné
+        //      - "LOOSE" = pour combat perdu
+
+        // On recupere l'attaquant et on le charge
+        $attaquant = new Player ($idAttaquant);
+        //Si notre agilité dépasse la force d'attaque d'au moins 3 points, on esquive. Personne n'a alors gagné ou perdu le combat,
+        //et on perd 1 point d'agilité.
+        if ($this->get("agility") >= $force + 3){
+            $this->set("agility", $this->get("agility") - 1);
+            $this->update();
+            return "ESQUIVE";
+        }
+        // Si notre force est supérieure strictement à celle de l'attaque, on riposte : voir ci-après la riposte. On gagne le combat et
+        //un point de vie si on gagne la riposte, on perd le combat et 2 points de vie si on perd la riposte.
+        if($this->get("strength") > $force){
+            if($this->attack($this->get("strength"), $idAttaquant) === "WIN"){
+                // Si WIN on gagne le combat et + 1 pt de vie
+                $this->set("hp", $this->get("hp") + 1);
+                $this->update();
+                return "WIN";
+            }else if ($this->attack($this->get("strength"), $idAttaquant) === "LOOSE"){
+               //si on perd le combat et  - 2 points de vie
+                $this->set("hp", $this->get("hp") - 2);
+                $this->update();
+                return "LOOSE";
+            }else if($this->attack($this->get("strength"), $idAttaquant) === "ESQUIVE"){
+                // Si combat egaliter on perd 1 point d agiliter
+                $this->set("agility", $this->get("agility") - 1);
+                $this->update();
+                return "EQUAL";
+            }
+        }
+        // Sinon, on se défend : si notre résistance est supérieure ou égale à la force de l'attaque, on gagne le combat, si elle est
+        //inférieure, on le perd et on perd en points de vie la différence entre notre résistance et la force de l'attaque
+        if($this->get("resistance") >= $force){
+            return "WIN";
+        }else if($this->get("resistance") < $force){
+            // On recupère la différence entre la resistance et la force dans une variable
+            $pvASoustraire = $this->get("resistance") - $force;
+            // on la soustrait au point de vie
+            $this->set("hp", $this->get("hp") - $pvASoustraire);
+            $this->update();
+            return "LOOSE";
+         }
+        return "EQUAL";
     }
 }

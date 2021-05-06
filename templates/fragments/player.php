@@ -29,14 +29,14 @@
         }
         ?> 
     </div>
-    <?php if ($agility >= 3 and $strength >= 1) { ?>
+    <?php if ($agility >4 and $strength >= 1) { ?>
         <p><button onclick="augmenterStrength()" class="btn">augmenter Force</button></p>
     <?php } else {
         ?>
         <p><button onclick="augmenterStrength()" class="btn disable" disabled="disabled">augmenter Force</button></p>
     <?php
     }
-    if ($agility >= 3 and $resistance >= 1) {
+    if ($agility >4 and $resistance >= 1) {
         ?>
         <p><button onclick="augmenterRes()"  class="btn">augmenter resistance</button></p>
 <?php } else { ?>

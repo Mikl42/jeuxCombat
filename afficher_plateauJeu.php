@@ -23,7 +23,7 @@ if (isset($_REQUEST)) {
     $listePlayer = $player->listePlayerSameRoom();
 
 
-//recupere agility et room
+//recupere tous les stat
     $agility = $player->get("agility");
     $room = $player->get("room");
     $resistance = $player->get("resistance");

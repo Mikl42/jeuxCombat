@@ -16,6 +16,7 @@ $listePlayer = $player->listePlayerSameRoom();
     $resistance = $player->get("resistance");
     $strength = $player->get("strength");
     $hp = $player->get("hp");
-    
+
+
 
 include "templates/fragments/main.php";

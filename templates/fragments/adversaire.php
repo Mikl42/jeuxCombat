@@ -9,8 +9,15 @@
 
     <div>
         <?php
-        foreach ($listePlayer as $adversaire) {
-            echo "<p><a href='" . $adversaire->getId() . "'> " . $adversaire->get('pseudo') . " </a></p>";
+        if($player->get('room') == 0 OR $player->get('room') == 10){
+            foreach ($listePlayer as $adversaire) {
+                echo "<p>" . $adversaire->get('pseudo') . "</p>";
+            }
+
+        }else{
+            foreach ($listePlayer as $adversaire) {
+                echo "<p><a href='testC.php?id=" . $adversaire->getId() . "'> " . $adversaire->get('pseudo') . " </a></p>";
+                }
         }
         ?>
     </div>
