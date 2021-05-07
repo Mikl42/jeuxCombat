@@ -29,7 +29,8 @@ if (isset($_REQUEST)) {
     $resistance = $player->get("resistance");
     $strength = $player->get("strength");
     $hp = $player->get("hp");
-    
+
+    $listeHistoricPlayer = $player->loadHistoric();
     include 'templates/pages/plateauJeu.php';
 }
 

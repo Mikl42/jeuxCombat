@@ -18,5 +18,6 @@ $listePlayer = $player->listePlayerSameRoom();
     $hp = $player->get("hp");
 
 
+$listeHistoricPlayer = $player->loadHistoric();
 
 include "templates/fragments/main.php";

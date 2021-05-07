@@ -18,32 +18,34 @@
 $(function () {
     setInterval(timerInterval, 500);
 
+});
 
-    function timerInterval() {
-        $.ajax("actualiser_plateauJeu.php", {
+function timerInterval() {
+    $.ajax("actualiser_plateauJeu.php", {
+        methode: "GET",
+        success: actuPlateau,
+        error: function () {
+            alert("Une erreur s'est produite.... again");
+        }
+    });
+}
+
+function actuPlateau(data) {
+    var plateau = $(".putaindeMain");
+    plateau.html(data);
+}
+
+function attaquer($id){
+    $.ajax("attaquer.php",
+        {
             methode: "GET",
             success: actuPlateau,
             error: function () {
                 alert("Une erreur s'est produite.... again");
             }
-        });
-        /*$.ajax("timer_agility.php", {
-           methode : "GET",
-           success : actuPlateau,
-           error: function(){
-               alert("Une erreur s'est produite, timer agi");
-           }
-           
-        });*/
-    }
-
-    function actuPlateau(data) {
-        var plateau = $(".putaindeMain");
-        plateau.html(data);
-    }
-
-});
-
+        }
+    );
+}
 
 function augmenterStrength() {
     //role : modification de la force et l'affichage sur le template 

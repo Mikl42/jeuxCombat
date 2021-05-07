@@ -3,7 +3,7 @@
 class Historic extends Player{
 
     protected $table = "historic";
-    protected $listeChamps = ["typeaction", "room", "opponent", "resultfight", "hp", "strength", "agility", "resistance","timeaction", "idplayer"];
+    protected $listeChamps = ["typeaction", "room", "opponent", "resultfight", "hp", "strength", "agility", "resistance","timesaction", "idplayer"];
     protected $listeLiens = ["idplayer" => "player" ];
 
     protected $valeurs = [];
@@ -34,6 +34,22 @@ class Historic extends Player{
         }
 
     }
+    function getValue($nomChamp) {
+        // Rôle : retourner la valeur physique d'un champ
+        // Retour : la valeur si c'est un champ simple
+        // Paramètre :
+        //    $nomChamp : nom du champ à récupérer
+
+        // Récupérer la valeur du champ dans $valeur, si elle existe (sinon, on retourne "")
+        // La valeur existe si il y a une valeur dans la tableau $this->valeurs à l'index $nomChamp : $this->valeurs[$nomChamp]
+        if (isset($this->valeurs[$nomChamp])) {
+            // Il existe une valeur : on la retourne
+            return $this->valeurs[$nomChamp];
+        } else {
+            return  "";
+        }
+
+    }
 
     public function getLien($nomChamp) {
         // Rôle : retourner la valeur d'un champ (en supposant que le champ est simple)champ de typoe lien, on retourne l'objet pointé)
@@ -41,7 +57,7 @@ class Historic extends Player{
         // Paramètre :
         //    $nomChamp : nom du champ à récupérer
 
-        if ( ! isset($this->liens[$nomChamp])) return new _model();
+        if ( ! isset($this->liens[$nomChamp])) return new Historic();
 
 
         $model = $this->liens[$nomChamp];

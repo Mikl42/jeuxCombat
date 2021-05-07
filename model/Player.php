@@ -279,45 +279,12 @@ class Player
         return $listePlayer;
     }
 
-    function avancer() {
-        //role : avancer dans la salle suivante
-        //parametre : neant
-        //retuour
-        //recupere l'agilité
-        $agility = $this->get("agility");
-        //recupere la salle + 1
-        $nextRoom = $this->get("room") + 1;
-
-        //si agility est superieur ou egal a nextroom
-        if (($agility >= $nextRoom) AND ($nextRoom <= 10)) {
-            //on avance dans la room suivante = room +1
-            $this->set("room", $nextRoom);
-            $this->set("agility", $this->get('agility') - $nextRoom);
-            //appel de la methode qui met a jour les stats
-            $this->update();
-            return;
-        }
-    }
-
-    function reculer() {
-        //role reculer a la salle precedente
-        //parametre neant
-        //retour neant
-
-        if ($this->get("room") >= 1) {
-            $this->set("room", $this->get('room') - 1);
-
-            $this->update();
-            return;
-        }
-    }
-
     public function loadHistoric(){
         // Role : Récupère tout l' historiques du joueur
         // Paramètre : Néant
         // Retour : tableau d'objet Historic
-        $sql = "SELECT * FROM `historic` WHERE `idplayer` = :idPlayer";
-        $param = [":idPlayer" => 29];
+        $sql = "SELECT * FROM `historic` WHERE `idplayer` = :idPlayer ORDER BY `timesaction` DESC";
+        $param = [":idPlayer" => $this->getId()];
         $req = $this->executeSql($sql, $param);
 
         if ($req === false)return false;
@@ -352,7 +319,7 @@ class Player
             return "LOOSE";
         }
         // Si l’adversaire esquive et que l’on a 10 points de force ou plus, un point de force devient un point de résistance.
-        if($adversaire->subirAttack($force, $this->getId()) === "ESQUIVE") {
+        if($adversaire->subirAttack($this->get("strength"), $this->getId()) === "ESQUIVE") {
             if($this->get("strength") >= 10){
                 $this->set("strength", $this->get("strength") - 1);
                 $this->set("resistance", $this->get("resistance") + 1);
@@ -363,9 +330,9 @@ class Player
             }
         }
         // Si on gagne le combat, on récupère un point d'agilité (ça motive ! ), ou un point de vie si on a déjà 15 points d'agilité.
-        // on recupère ses point de vie avant le combat
+        // on temporise les points de vie de l'adversaire avant le combat
         $stockHpAdversaire = $adversaire->get("hp");
-        if($adversaire->subirAttack($force, $this->getId()) === "LOOSE") {
+        if($adversaire->subirAttack($this->get("strength"), $this->getId()) === "LOOSE") {
             if($this->get("agility") < 15){
                 $this->set("agility", $this->get("agility") + 1);
                 $this->update();
@@ -389,10 +356,12 @@ class Player
         //      - $force = force de l'attaque donnée
         //      - $idAttaquant = l'id du joueur qui attaque
         // Retour:
-        //      - "E" = pour une esquive
+        //      - "ESQUIVE" = pour une esquive
         //      - "WIN" = pour combat gagné
         //      - "LOOSE" = pour combat perdu
-
+        //      - "EQUAL" = pour équaliter
+        // Force la variable $force à etre un integer pour pouvoire réaliser les calculs
+        $force = (int)$force;
         // On recupere l'attaquant et on le charge
         $attaquant = new Player ($idAttaquant);
         //Si notre agilité dépasse la force d'attaque d'au moins 3 points, on esquive. Personne n'a alors gagné ou perdu le combat,
@@ -428,12 +397,118 @@ class Player
             return "WIN";
         }else if($this->get("resistance") < $force){
             // On recupère la différence entre la resistance et la force dans une variable
-            $pvASoustraire = $this->get("resistance") - $force;
+
+            $pvASoustraire = (int)$this->get("resistance") - $force;
             // on la soustrait au point de vie
-            $this->set("hp", $this->get("hp") - $pvASoustraire);
+
+            $this->set("hp", (int)$this->get("hp") - $pvASoustraire);
             $this->update();
             return "LOOSE";
          }
         return "EQUAL";
+    }
+    function augmenterForce() {
+        //role augmenter la force
+        //parametre neant
+        //return un tableau des erreurs rencontré si celui ci n'est pas vid
+        //si agility est strictement superieur a 3 et la force <= a 14 alors et resistance strictement sup a 1.
+        // Tableau vide pour recupérer les erreurs
+
+        if (($this->get('agility') > 3) && ($this->get('strength') <= 14) && ($this->get('resistance') > 1)) {
+            //agility perd 3 point, force gagne 1 pt et resistance perd 1pt
+            $this->set("agility", $this->get('agility') - 3);
+            $this->set("strength", $this->get('strength') + 1);
+            $this->set("resistance", $this->get('resistance') - 1);
+
+//appel la methode qui mettra a jour les stat
+            $this->update();
+            return;
+        }
+        //sinon si point d'agi insuffisant
+        if ($this->get('agility') <= 3) {
+            $message = "agilité insuffisante";
+            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
+            return $message;
+        }
+        //sinon si force deja trop elevée
+        if ($this->get('strength') >= 15) {
+            $message = "point de force au maximum";
+            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
+            return $message;
+        }
+//sinon si resistance insuffisante
+        if ($this->get('resistance') <= 1) {
+            $message = "point de resistance insuffisant";
+            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
+            return $message;
+        }
+    }
+
+    function augmenterResistance() {
+        //role : augmente la resistance
+        //parametre neant
+        //retour :
+        //si agility est strictement superieur a 3 et la force <= a 14 alors et resistance strictement sup a 1.
+        if (($this->get('agility') > 3) && ($this->get('resistance') <= 14) && ($this->get('strength') > 1)) {
+            //agility perd 3 point, force gagne 1 pt et resistance perd 1pt
+            $this->set("agility", $this->get('agility') - 3);
+            $this->set("strength", $this->get('strength') - 1);
+            $this->set("resistance", $this->get('resistance') + 1);
+
+            //appel la methode qui mettra a jour les stat
+            $this->update();
+            return;
+        }
+        //sinon si point d'agi insuffisant
+        if ($this->get('agility') <= 3) {
+            $message = "agilité insuffisante";
+            return $message;
+            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
+        }
+//sinon si force deja trop elevée
+        if ($this->get('strength') <= 1) {
+            $message = "point de force au maximum";
+            return $message;
+            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
+        }
+//sinon si resistance insuffisante
+        if ($this->get('resistance') >= 15) {
+            $message = "point de resistance insuffisant";
+            return $message;
+            //retour au template plateauJeu en passant par ajax pour la MAJ des stat
+        }
+    }
+
+    function avancer() {
+        //role : avancer dans la salle suivante
+        //parametre : neant
+        //retuour
+        //recupere l'agilité
+        $agility = $this->get("agility");
+        //recupere la salle + 1
+        $nextRoom = $this->get("room") + 1;
+
+        //si agility est superieur ou egal a nextroom
+        if (($agility >= $nextRoom) AND ($nextRoom <= 10)) {
+            //on avance dans la room suivante = room +1
+            $this->set("room", $nextRoom);
+            $this->set("agility", $this->get('agility') - $nextRoom);
+            //appel de la methode qui met a jour les stats
+            $this->update();
+            return;
+        }
+    }
+
+    function reculer() {
+        //role reculer a la salle precedente
+        //parametre neant
+        //retour neant
+
+        if ($this->get("room") >= 1) {
+            $this->set("room", $this->get('room') - 1);
+
+            $this->update();
+            return;
+        }
     }
 }

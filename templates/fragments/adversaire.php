@@ -16,7 +16,7 @@
 
         }else{
             foreach ($listePlayer as $adversaire) {
-                echo "<p><a href='testC.php?id=" . $adversaire->getId() . "'> " . $adversaire->get('pseudo') . " </a></p>";
+                echo "<p onclick='attaquer(".$adversaire->getId().")'>".$adversaire->get('pseudo')."</p>";
                 }
         }
         ?>
